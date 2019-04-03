@@ -7,5 +7,5 @@ target 'Rolodex' do
 
   # Pods for Rolodex
   # pod 'SQLite.swift','~> 0.11.5' 
-  pod 'SQLite.swift','0.11.3'
+  pod 'SQLite.swift','0.11.4'
 end

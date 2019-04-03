@@ -60,19 +60,21 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let phone = phoneTextField.text ?? ""
         let address = addressTextField.text ?? ""
         
-        
-            let contact = Contact(id: 0, name: name, phone: phone, address: address)
+        //try and add a contact to database
+        if let id = MycontactsDB.instance.addContact(cname: name, cphone: phone, caddress: address) {
+            //If successful adding a contact, then use the id 
+            let contact = Contact(id: id, name: name, phone: phone, address: address)
             contacts.append(contact)
-            contactsTableView.insertRows(at: [NSIndexPath(row: contacts.count-1, section: 0) as IndexPath], with: .fade)
+            contactsTableView.insertRows(at: [NSIndexPath(row: contacts.count-1, section: 0) as IndexPath], with: .fade) }
         
     }
     //REWRITE MISSED MOST
     @IBAction func deleteButtonClicked(_ sender: UIButton) {
         if selectedContact != nil {
+            if MyContactsDB.instance.deleteContact(cid: contacts[selectedContact!].id!) {
             contacts.remove(at: selectedContact!)
             contactsTableView.deleteRows(at: [NSIndexPath(row: selectedContact!, section: 0) as IndexPath], with: .fade)
         }
-    
         else {print("No item selected!") }
     }
     //write part
@@ -84,15 +86,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 name: nameTextField.text ?? "",
                 phone: phoneTextField.text ?? "",
                 address: addressTextField.text ?? "")
-            
+            if MyContactsDB.instance.updateContact(cid: id, newContact: contact) {
             contacts.remove(at: selectedContact!)
-            contacts.insert(contact, at: selectedContact!)
-
+                contacts.insert(contact, at: selectedContact!) }
             contactsTableView.reloadData()
                 
             }
         else{print("No Item Selected")}
         }
+}
 }
 
 
